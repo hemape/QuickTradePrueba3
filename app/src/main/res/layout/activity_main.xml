@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.adri9ps.quicktrade.MainActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="0.00" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="NUEVO USUARIO"
+        android:textAlignment="center"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00" />
+
+    <EditText
+        android:id="@+id/editTextNombreUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:ems="10"
+        android:hint="Nombre:"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editTextApellidosUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:ems="10"
+        android:hint="Apellidos:"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editTextCorreoUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:ems="10"
+        android:hint="Correo:"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/editTextDireccionUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:ems="10"
+        android:hint="Direccion:"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="0.00" />
+
+    <Button
+        android:id="@+id/btnNuevoUsuario"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.00"
+        android:text="ENVIAR" />
+</LinearLayout>
