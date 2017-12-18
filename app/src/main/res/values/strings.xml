@@ -1,7 +1,10 @@
 <resources>
     <string name="app_name">QuickTrade</string>
     <string name="nodo_usuarios">usuarios</string>
-    <string name="campo_titulo">titulo</string>
-    <string name="campo_año">año</string>
+    <string name="campo_nombre">nombre</string>
+    <string name="campo_apellidos">apellido</string>
+    <string name="campo_direccion">direccion</string>
+    <string name="campo_correo">correo</string>
+    <string name="campo_usuario">usuario</string>
 
 </resources>

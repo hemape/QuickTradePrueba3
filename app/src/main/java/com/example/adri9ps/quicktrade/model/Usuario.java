@@ -10,6 +10,15 @@ public class Usuario {
     private String apellido;
     private String correo;
     private String direccion;
+    private String usuario;
+
+    public Usuario(String nombre, String apellido, String correo, String direccion, String usuario) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.correo = correo;
+        this.direccion = direccion;
+        this.usuario = usuario;
+    }
 
     @Override
     public String toString() {
@@ -18,6 +27,7 @@ public class Usuario {
                 ", apellido='" + apellido + '\'' +
                 ", correo='" + correo + '\'' +
                 ", direccion='" + direccion + '\'' +
+                ", usuario='" + usuario + '\'' +
                 '}';
     }
 
@@ -27,6 +37,14 @@ public class Usuario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public String getApellido() {
@@ -53,11 +71,9 @@ public class Usuario {
         this.direccion = direccion;
     }
 
-    public Usuario(String nombre, String apellido, String correo, String direccion) {
-        this.nombre = nombre;
-        this.apellido = apellido;
-        this.correo = correo;
 
-        this.direccion = direccion;
+
+    public Usuario() {
+
     }
 }
