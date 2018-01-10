@@ -11,13 +11,15 @@ public class Usuario {
     private String correo;
     private String direccion;
     private String usuario;
+    private String contraseña;
 
-    public Usuario(String nombre, String apellido, String correo, String direccion, String usuario) {
+    public Usuario(String nombre, String apellido, String correo, String direccion, String usuario, String contraseña) {
         this.nombre = nombre;
         this.apellido = apellido;
         this.correo = correo;
         this.direccion = direccion;
         this.usuario = usuario;
+        this.contraseña = contraseña;
     }
 
     @Override
@@ -28,6 +30,7 @@ public class Usuario {
                 ", correo='" + correo + '\'' +
                 ", direccion='" + direccion + '\'' +
                 ", usuario='" + usuario + '\'' +
+                ", contraseña='" + contraseña + '\'' +
                 '}';
     }
 
@@ -37,6 +40,14 @@ public class Usuario {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getContraseña() {
+        return contraseña;
+    }
+
+    public void setContraseña(String contraseña) {
+        this.contraseña = contraseña;
     }
 
     public String getUsuario() {

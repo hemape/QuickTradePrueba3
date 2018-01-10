@@ -6,5 +6,6 @@
     <string name="campo_direccion">direccion</string>
     <string name="campo_correo">correo</string>
     <string name="campo_usuario">usuario</string>
+    <string name="campo_contraseña">contraseña</string>
 
 </resources>
