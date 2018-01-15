@@ -1,5 +1,6 @@
 package com.example.adri9ps.quicktrade;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +11,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.adri9ps.quicktrade.model.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
         nombreU = (EditText) findViewById(R.id.editTextNombreUsuario);
@@ -88,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
                 if (nombreU.getText().toString().isEmpty() || apellidosU.getText().toString().isEmpty() ||
                         correoU.getText().toString().isEmpty() || direccionU.getText().toString().isEmpty()
-                        || usuarioU.getText().toString().isEmpty()|| contraseñaU.getText().toString().isEmpty()) {
+                        || usuarioU.getText().toString().isEmpty() || contraseñaU.getText().toString().isEmpty()) {
                     Toast.makeText(MainActivity.this, "Faltan datos por rellenar", Toast.LENGTH_SHORT).show();
                 } else {
                     boolean valido = true;
@@ -103,6 +107,9 @@ public class MainActivity extends AppCompatActivity {
                         String clave = bbdd.push().getKey();
                         Usuario u = new Usuario(nombreU.getText().toString(), apellidosU.getText().toString(), correoU.getText().toString(), direccionU.getText().toString(), usuarioU.getText().toString(), contraseñaU.getText().toString());
                         bbdd.child(clave).setValue(u);
+                        String email = correoU.getText().toString();
+                        String password = contraseñaU.getText().toString();
+                        //registrar(email, password);
 
                         Toast.makeText(MainActivity.this, "Usuario añadido", Toast.LENGTH_SHORT).show();
                     }
@@ -161,4 +168,33 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-}
+
+    private void registrar(String email, String password){
+
+        fba = FirebaseAuth.getInstance();
+
+        fba.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = fba.getCurrentUser();
+                            // If sign in succes, display a message to the user.
+                            Toast.makeText(MainActivity.this, "Authentication succes."+user.getUid(),
+                                    Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast.makeText(MainActivity.this, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show();
+
+                        }
+
+                        // ...
+                    }
+                });
+
+    }
+    }
+
