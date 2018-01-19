@@ -46,10 +46,18 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btnLogin"
+            android:id="@+id/btnIniciarSesion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Iniciar Sesion" />
+
+        <Button
+            android:id="@+id/btnRegistrar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        android:clickable="true"
+        android:onClick="onClick"
+            android:text="Registrarse" />
     </LinearLayout>
 
 </LinearLayout>
