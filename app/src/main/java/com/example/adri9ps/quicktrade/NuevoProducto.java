@@ -128,7 +128,7 @@ public class NuevoProducto extends AppCompatActivity {
 //                    }
                     if (valido) {
 
-                        Producto prod = new Producto(nombreProducto.getText().toString(), descripcionProducto.getText().toString(), precioProducto.getText().toString(),categoria);
+                        Producto prod = new Producto(nombreProducto.getText().toString(), descripcionProducto.getText().toString(), categoria,precioProducto.getText().toString());
                         final String claveP = bbddP.push().getKey();
 
                         bbddP.child(claveP).setValue(prod);

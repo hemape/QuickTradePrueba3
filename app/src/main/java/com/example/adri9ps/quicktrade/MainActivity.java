@@ -65,6 +65,8 @@ public class MainActivity extends AppCompatActivity {
         todosProductos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent aTodosProductos = new Intent(getApplicationContext(), TodosProductos.class);
+                startActivity(aTodosProductos);
 
             }
         });
