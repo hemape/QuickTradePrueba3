@@ -30,6 +30,7 @@ public class NuevoProducto extends AppCompatActivity {
     private EditText precioProducto;
     private Spinner categoriaProducto;
     private Button btnNuevoProducto;
+    private Button btnEliminarProd;
     private Button btnModificarProducto;
     private ListView lvMisProductos;
     private String categoria;
@@ -39,6 +40,7 @@ public class NuevoProducto extends AppCompatActivity {
     ArrayList<String> listadoMisProductos = new ArrayList<String>();
     DatabaseReference bbdd;
     DatabaseReference bbddP;
+    String claveEliminar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +53,9 @@ public class NuevoProducto extends AppCompatActivity {
         categoriaProducto = (Spinner) findViewById(R.id.spinnerCategorias);
         btnNuevoProducto = (Button) findViewById(R.id.btnNuevoProducto);
         btnModificarProducto = (Button) findViewById(R.id.btnModificarProducto);
+        btnEliminarProd = (Button) findViewById(R.id.btnEliminarProducto);
         lvMisProductos = (ListView) findViewById(R.id.listViewMisProductos);
+
 
         fba = FirebaseAuth.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -137,6 +141,97 @@ public class NuevoProducto extends AppCompatActivity {
                     }
 
                 }
+            }
+        });
+
+        btnEliminarProd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Query q = bbddP.orderByChild("nombre").equalTo(nombreProducto.getText().toString());
+
+                q.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+
+
+                        for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
+
+
+                            claveEliminar = datasnapshot.getKey();
+
+
+                            DatabaseReference ref = bbddP.child(claveEliminar);
+
+                            ref.removeValue();
+
+                            Toast.makeText(NuevoProducto.this, "Se ha eliminado el producto: "+ nombreProducto.getText().toString(), Toast.LENGTH_SHORT).show();
+
+
+
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+            }
+        });
+
+        btnModificarProducto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String nombreProd = nombreProducto.getText().toString();
+
+                if (!nombreProd.isEmpty()) {
+                    Query q = bbddP.orderByChild("nombre").equalTo(nombreProd);
+
+                    q.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
+                                String clave = datasnapshot.getKey();
+
+                                if (!descripcionProducto.getText().toString().isEmpty()) {
+                                    bbddP.child(clave).child("descripcion").setValue(descripcionProducto.getText().toString());
+                                }
+                                if (!precioProducto.getText().toString().isEmpty()) {
+                                    bbddP.child(clave).child("precio").setValue(precioProducto.getText().toString());
+                                }
+                                if (!categoria.isEmpty()) {
+                                    bbddP.child(clave).child("categoria").setValue(categoria.toString());
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    Toast.makeText(NuevoProducto.this, "Los datos se han modificado con éxito", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(NuevoProducto.this, "Introduce los datos", Toast.LENGTH_LONG).show();
+                }
+
+
+
+
+
+
+
             }
         });
     }
