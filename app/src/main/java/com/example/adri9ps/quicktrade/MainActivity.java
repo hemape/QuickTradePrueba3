@@ -58,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
         todosUsuarios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent activity = new Intent(getApplicationContext(), TodosUsuarios.class);
+                startActivity(activity);
 
             }
         });

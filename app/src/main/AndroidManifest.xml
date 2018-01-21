@@ -20,7 +20,8 @@
         <activity android:name=".RegistrarUsuario" />
         <activity android:name=".EditarPerfil" />
         <activity android:name=".NuevoProducto" />
-        <activity android:name=".TodosProductos"></activity>
+        <activity android:name=".TodosProductos" />
+        <activity android:name=".TodosUsuarios"></activity>
     </application>
 
 </manifest>

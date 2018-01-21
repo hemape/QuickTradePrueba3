@@ -29,7 +29,7 @@ public class EditarPerfil extends AppCompatActivity {
     private EditText nombreUPerfil;
     private EditText apellidosUPerfil;
     private EditText direccionUPerfil;
-    private TextView usuarioPerfil;
+    private EditText usuarioPerfil;
     private Button btnModificarPerfil;
     private ListView lvPerfil;
     ArrayList<String> listadoUsuarios;
@@ -48,7 +48,7 @@ public class EditarPerfil extends AppCompatActivity {
         nombreUPerfil = (EditText) findViewById(R.id.editTextNombreUsuarioPErfil);
         apellidosUPerfil = (EditText) findViewById(R.id.editTextApellidosUsuarioPerfil);
         //correoU = (EditText) findViewById(R.id.editTextCorreoUsuarioPErfil);
-        usuarioPerfil = (TextView) findViewById(R.id.txtUsuario);
+        usuarioPerfil = (EditText) findViewById(R.id.usuarioPErfil);
         direccionUPerfil = (EditText) findViewById(R.id.editTextDireccionUsuarioPErfil);
         //contraseñaU = (EditText) findViewById(R.id.editContraseña);
         btnModificarPerfil = (Button) findViewById(R.id.btnModificarPErfil);
@@ -75,8 +75,7 @@ public class EditarPerfil extends AppCompatActivity {
 
 
                 }
-                //Cargamos datos usuario actual
-                cargarUsuario(usuarioAEditar);
+
             }
 
             @Override
@@ -84,66 +83,49 @@ public class EditarPerfil extends AppCompatActivity {
 
             }
 
+        });
+        btnModificarPerfil.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
 
+                String usuario = usuarioPerfil.getText().toString();
+
+                if (!usuario.isEmpty()) {
+                    Query q = bbdd.orderByChild(getString(R.string.campo_usuario)).equalTo(usuario);
+
+                    q.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
+                                String clave = datasnapshot.getKey();
+
+                                if (!nombreUPerfil.getText().toString().isEmpty()) {
+                                    bbdd.child(clave).child(getString(R.string.campo_nombre)).setValue(nombreUPerfil.getText().toString());
+                                }
+                                if (!apellidosUPerfil.getText().toString().isEmpty()) {
+                                    bbdd.child(clave).child(getString(R.string.campo_apellidos)).setValue(apellidosUPerfil.getText().toString());
+                                }
+                                if (!direccionUPerfil.getText().toString().isEmpty()) {
+                                    bbdd.child(clave).child(getString(R.string.campo_direccion)).setValue(direccionUPerfil.getText().toString());
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    Toast.makeText(EditarPerfil.this, "Los datos se han modificado con éxito", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(EditarPerfil.this, "Error", Toast.LENGTH_LONG).show();
+                }
+
+            }
         });
     }
 
-    //Eventos botones
-    public void onClick(View v){
-        switch (v.getId()){
-            case R.id.btnModificarPErfil:
 
-                if (validarCampos()){
-                    //Comprobamos que datos han sido cambiados
-
-                    //Nombre
-                    if (!nombreUPerfil.getText().toString().equals(usuarioAEditar.getNombre())){
-                        cambiarValor("nombre",nombreUPerfil.getText().toString());
-                       // Toast.makeText(this, getString(R.string.edit_name_changed) + editNombre.getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    //Apedillos
-                    if (!apellidosUPerfil.getText().toString().equals(usuarioAEditar.getApellido())){
-                        cambiarValor("apellido",apellidosUPerfil.getText().toString());
-                        //Toast.makeText(this, getString(R.string.edit_surnames_changed) + editApedillos.getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-
-                    //Dirección
-                    if (!direccionUPerfil.getText().toString().equals(usuarioAEditar.getDireccion())){
-                        cambiarValor("direccion",direccionUPerfil.getText().toString());
-                        //Toast.makeText(this, getString(R.string.edit_direction_changed) + " " + editDireccion.getText().toString(), Toast.LENGTH_SHORT).show();
-                    }
-
-
-
-                }
-                break;
-        }
-    }
-
-    private void cambiarValor(String campo, String valor) {
-        //Procedemos a cambiar el valor
-        bbdd.child(clave).child(campo).setValue(valor);
-    }
-
-    //Cargar datos del usuario
-    private void cargarUsuario(Usuario user){
-        usuarioPerfil.setText("@" + usuarioAEditar.getUsuario());
-        nombreUPerfil.setText(usuarioAEditar.getNombre());
-        apellidosUPerfil.setText(usuarioAEditar.getApellido());
-        direccionUPerfil.setText(usuarioAEditar.getDireccion());
-
-        Toast.makeText(this, "Datos de " + user.getUsuario() + " cargados correctamente", Toast.LENGTH_SHORT).show();
-    }
-
-    //Validar campos introducidos
-    private boolean validarCampos(){
-        //Evalua campos no vacios
-        if (nombreUPerfil.getText().toString().isEmpty() || apellidosUPerfil.getText().toString().isEmpty() ||  direccionUPerfil.getText().toString().isEmpty()){
-            //Toast.makeText(getApplicationContext(),getString(R.string.error_input_values_empty),Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        return true;
-    }
 }

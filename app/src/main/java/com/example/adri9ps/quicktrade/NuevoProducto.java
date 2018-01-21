@@ -59,7 +59,8 @@ public class NuevoProducto extends AppCompatActivity {
         final String claveUsu = fba.getCurrentUser().getUid();
 
 
-        bbddP = FirebaseDatabase.getInstance().getReference(("Productos"+claveUsu));
+        bbddP = FirebaseDatabase.getInstance().getReference(("Productos"));
+
 
         bbddP.addValueEventListener(new ValueEventListener() {
 

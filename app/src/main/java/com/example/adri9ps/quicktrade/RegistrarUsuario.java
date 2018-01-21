@@ -186,6 +186,8 @@ public class RegistrarUsuario extends AppCompatActivity {
                             Toast.makeText(RegistrarUsuario.this, "Authentication succes."+user.getUid(),
                                     Toast.LENGTH_SHORT).show();
                             insertaUsuarios();
+                            Intent activity = new Intent(getApplicationContext(), InicioSesion.class);
+                            startActivity(activity);
 
                         } else {
                             // If sign in fails, display a message to the user.

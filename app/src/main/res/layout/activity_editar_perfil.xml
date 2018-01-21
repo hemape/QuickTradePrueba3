@@ -26,12 +26,13 @@
         android:layout_height="wrap_content"
         android:layout_weight="0.00" />
 
-    <TextView
-        android:id="@+id/txtUsuario"
+    <EditText
+        android:id="@+id/usuarioPErfil"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Usuario: "
-        android:textSize="24sp" />
+        android:ems="10"
+        android:hint="Usuario:"
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/editTextNombreUsuarioPErfil"
