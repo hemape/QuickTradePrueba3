@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -32,10 +33,10 @@ public class NuevoProducto extends AppCompatActivity {
     private Button btnModificarProducto;
     private ListView lvMisProductos;
     private String categoria;
-    ArrayList<String> listadoMisProductos;
     private FirebaseAuth fba;
     FirebaseUser user;
-
+    ArrayAdapter<String> adaptadorMisProductos;
+    ArrayList<String> listadoMisProductos = new ArrayList<String>();
     DatabaseReference bbdd;
     DatabaseReference bbddP;
 
@@ -53,12 +54,11 @@ public class NuevoProducto extends AppCompatActivity {
         lvMisProductos = (ListView) findViewById(R.id.listViewMisProductos);
 
         fba = FirebaseAuth.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
 
         bbdd = FirebaseDatabase.getInstance().getReference(getString(R.string.nodo_usuarios));
         final String claveUsu = fba.getCurrentUser().getUid();
-
-
         bbddP = FirebaseDatabase.getInstance().getReference(("Productos"));
 
 
@@ -66,21 +66,24 @@ public class NuevoProducto extends AppCompatActivity {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                cargarProductosDelUsuarioLogueado();
 
-                ArrayAdapter<String> adaptadorMisProductos;
-                ArrayList<String> listadoMisProductos = new ArrayList<String>();
-                listadoMisProductos = new ArrayList<String>();
-
-                for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
-                    Producto prod = datasnapshot.getValue(Producto.class);
-
-                    String nombreProducto = prod.getNombre();
-                    listadoMisProductos.add(nombreProducto);
-
-
-                }
-                adaptadorMisProductos = new ArrayAdapter<String>(NuevoProducto.this, android.R.layout.simple_list_item_1, listadoMisProductos);
-                lvMisProductos.setAdapter(adaptadorMisProductos);
+//                ArrayAdapter<String> adaptadorMisProductos;
+//                ArrayList<String> listadoMisProductos = new ArrayList<String>();
+//
+//                for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
+//                    String prodDeUsuario = datasnapshot.getValue(Producto.class).getCodigo_usuario_logueado().toString();
+//                    Producto prod = datasnapshot.getValue(Producto.class);
+//
+//                    String nombreProducto = prod.getNombre();
+//                    if(prodDeUsuario.equals(user.getUid().toString())) {
+//                        listadoMisProductos.add(nombreProducto);
+//                    }
+//
+//
+//                }
+//                adaptadorMisProductos = new ArrayAdapter<String>(NuevoProducto.this, android.R.layout.simple_list_item_1, listadoMisProductos);
+//                lvMisProductos.setAdapter(adaptadorMisProductos);
             }
 
             @Override
@@ -116,27 +119,19 @@ public class NuevoProducto extends AppCompatActivity {
 
 
                 if (nombreProducto.getText().toString().isEmpty() || descripcionProducto.getText().toString().isEmpty() ||
-                        precioProducto.getText().toString().isEmpty() ) {
+                        precioProducto.getText().toString().isEmpty()) {
                     Toast.makeText(NuevoProducto.this, "Faltan datos por rellenar", Toast.LENGTH_SHORT).show();
                 } else {
                     boolean valido = true;
 
-//                    for (int i = 0; i < listadoMisProductos.size(); i++) {
-//                        if (nombreProducto.getText().toString().equals(listadoMisProductos.get(i))) {
-//                            Toast.makeText(NuevoProducto.this, "El producto ya existe", Toast.LENGTH_SHORT).show();
-//                            valido = false;
-//                        }
-//                    }
                     if (valido) {
 
-                        Producto prod = new Producto(nombreProducto.getText().toString(), descripcionProducto.getText().toString(), categoria,precioProducto.getText().toString());
+
+                        Producto prod = new Producto(nombreProducto.getText().toString(), descripcionProducto.getText().toString(), categoria, precioProducto.getText().toString(), claveUsu);
                         final String claveP = bbddP.push().getKey();
 
                         bbddP.child(claveP).setValue(prod);
                         Toast.makeText(NuevoProducto.this, "Producto añadido", Toast.LENGTH_SHORT).show();
-
-
-
 
 
                     }
@@ -144,9 +139,41 @@ public class NuevoProducto extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void cargarProductosDelUsuarioLogueado() {
+
+        Query q = bbddP.orderByChild("codigo_usuario_logueado").equalTo(user.getUid().toString());
+
+        q.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                //Carga Valores encontrados
 
 
+                //Obtenemos nombres de productos
+                for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
+                    Producto prod = datasnapshot.getValue(Producto.class);
+                    String nombreProductoHogar = prod.getNombre();
+
+                    listadoMisProductos.add(nombreProductoHogar);
+                    adaptadorMisProductos = new ArrayAdapter<String>(NuevoProducto.this, android.R.layout.simple_list_item_1, listadoMisProductos);
+                    lvMisProductos.setAdapter(adaptadorMisProductos);
+                    adaptadorMisProductos.notifyDataSetChanged();                }
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
+
 }
+
+
+
