@@ -27,7 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class RegistrarUsuario extends AppCompatActivity {
+public class    RegistrarUsuario extends AppCompatActivity {
 
     private EditText nombreU;
     private EditText apellidosU;

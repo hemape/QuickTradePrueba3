@@ -2,13 +2,10 @@ package com.example.adri9ps.quicktrade;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
+import com.example.adri9ps.quicktrade.R;
 import com.example.adri9ps.quicktrade.model.Producto;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,11 +17,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class TodosProductos extends AppCompatActivity {
+public class TodosFavoritos extends AppCompatActivity {
 
-    private ListView lvTec,lvCoches,lvHogar;
-
-
+    private ListView favoTec, favoCoches, favoHogar;
+    private FirebaseAuth fba;
     DatabaseReference bbddP;
 
     ArrayAdapter<String> adaptadorProductosHogar;
@@ -37,63 +33,30 @@ public class TodosProductos extends AppCompatActivity {
     ArrayList<String> listadoProductosHogarFavoritos = new ArrayList<String>();
     ArrayList<String> listadoProductosTecFavoritos = new ArrayList<String>();
 
-
-
-    private FirebaseAuth fba;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_todos_productos);
+        setContentView(R.layout.activity_todos_favoritos);
 
-        lvTec = (ListView) findViewById(R.id.listViewTecnologia);
-        lvCoches = (ListView) findViewById(R.id.listViewCoches);
-        lvHogar = (ListView) findViewById(R.id.listViewHogar);
-        fba = FirebaseAuth.getInstance();
-
+        favoTec = (ListView) findViewById(R.id.listViewTecnologiaFavorita);
+        favoHogar = (ListView) findViewById(R.id.listViewHogarFavoritos);
+        favoCoches = (ListView) findViewById(R.id.listViewCochesFavoritos);
 
         final String claveUsu = fba.getCurrentUser().getUid();
         bbddP = FirebaseDatabase.getInstance().getReference("Productos");
 
-
-        cargarProductosTecnologia();
-        cargarProductosCoches();
-        cargarProductosHogar();
-
-        lvTec.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), "Has anyadido el producto a favoritos: " + i, Toast.LENGTH_SHORT).show();
-                listadoProductosTecFavoritos.add(i, null);
-            }
-        });
-
-        lvCoches.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), "Has anyadido el producto a favoritos: " + i, Toast.LENGTH_SHORT).show();
-                listadoProductosCocheFavoritos.add(i, null);
-            }
-        });
-
-        lvHogar.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(), "Has anyadido el producto a favoritos: " + i, Toast.LENGTH_SHORT).show();
-                listadoProductosHogarFavoritos.add(i, null);
-            }
-        });
+        cargarProductosFavoritosTecnologia();
+        cargarProductosFavoritosCoches();
+        cargarProductosFavoritosHogar();
     }
 
-
-
-    public void cargarProductosTecnologia(){
-        Query q =  bbddP.orderByChild("categoria").equalTo("Tecnologia");
+    public void cargarProductosFavoritosTecnologia() {
+        Query q = bbddP.orderByChild("categoria").equalTo("Tecnologia");
 
         q.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 //Carga Valores encontrados
-
 
 
                 //Obtenemos nombres de productos
@@ -101,12 +64,10 @@ public class TodosProductos extends AppCompatActivity {
                     Producto prod = datasnapshot.getValue(Producto.class);
                     String nombreProductoTec = prod.getNombre();
 
-                    listadoProductosTec.add(nombreProductoTec);
-                    adaptadorProductosTec = new ArrayAdapter<String>(TodosProductos.this, android.R.layout.simple_list_item_1, listadoProductosTec);
-                    lvTec.setAdapter(adaptadorProductosTec);
+                    listadoProductosTecFavoritos.add(nombreProductoTec);
+                    adaptadorProductosTec = new ArrayAdapter<String>(TodosFavoritos.this, android.R.layout.simple_list_item_1, listadoProductosTecFavoritos);
+                    favoTec.setAdapter(adaptadorProductosTec);
                 }
-
-
 
             }
 
@@ -118,8 +79,8 @@ public class TodosProductos extends AppCompatActivity {
 
     }
 
-    public void cargarProductosCoches(){
-        Query q =  bbddP.orderByChild("categoria").equalTo("Coches");
+    public void cargarProductosFavoritosCoches() {
+        Query q = bbddP.orderByChild("categoria").equalTo("Coches");
 
         q.addValueEventListener(new ValueEventListener() {
             @Override
@@ -127,17 +88,15 @@ public class TodosProductos extends AppCompatActivity {
                 //Carga Valores encontrados
 
 
-
                 //Obtenemos nombres de productos
                 for (DataSnapshot datasnapshot : dataSnapshot.getChildren()) {
                     Producto prod = datasnapshot.getValue(Producto.class);
                     String nombreProductoCoche = prod.getNombre();
 
-                    listadoProductosCoche.add(nombreProductoCoche);
-                    adaptadorProductosCoche = new ArrayAdapter<String>(TodosProductos.this, android.R.layout.simple_list_item_1, listadoProductosCoche);
-                    lvCoches.setAdapter(adaptadorProductosCoche);
+                    listadoProductosCocheFavoritos.add(nombreProductoCoche);
+                    adaptadorProductosCoche = new ArrayAdapter<String>(TodosFavoritos.this, android.R.layout.simple_list_item_1, listadoProductosCocheFavoritos);
+                    favoCoches.setAdapter(adaptadorProductosCoche);
                 }
-
 
 
             }
@@ -149,7 +108,8 @@ public class TodosProductos extends AppCompatActivity {
         });
 
     }
-    public void cargarProductosHogar(){
+
+    public void cargarProductosFavoritosHogar(){
         Query q =  bbddP.orderByChild("categoria").equalTo("Hogar");
 
         q.addValueEventListener(new ValueEventListener() {
@@ -164,9 +124,9 @@ public class TodosProductos extends AppCompatActivity {
                     Producto prod = datasnapshot.getValue(Producto.class);
                     String nombreProductoHogar = prod.getNombre();
 
-                    lisadoProductosHogar.add(nombreProductoHogar);
-                    adaptadorProductosHogar = new ArrayAdapter<String>(TodosProductos.this, android.R.layout.simple_list_item_1, lisadoProductosHogar);
-                    lvHogar.setAdapter(adaptadorProductosHogar);
+                    listadoProductosHogarFavoritos.add(nombreProductoHogar);
+                    adaptadorProductosHogar = new ArrayAdapter<String>(TodosFavoritos.this, android.R.layout.simple_list_item_1, listadoProductosHogarFavoritos);
+                    favoHogar.setAdapter(adaptadorProductosHogar);
                 }
 
 

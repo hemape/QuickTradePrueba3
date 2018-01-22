@@ -7,6 +7,12 @@
     tools:context="com.example.adri9ps.quicktrade.MainActivity"
     android:orientation="vertical">
 
+    <Button
+        android:id="@+id/btnFavoritos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Favoritos" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
@@ -54,7 +60,7 @@
     <TextView
         android:id="@+id/textView7"
         android:layout_width="match_parent"
-        android:layout_height="50dp" />
+        android:layout_height="39dp" />
 
     <Button
         android:id="@+id/btnCerrarSesion"
